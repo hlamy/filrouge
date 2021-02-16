@@ -1,9 +1,24 @@
 version: '3'
 
 services:
-    web:
+    filrouge:
         build: .
         volumes :
-            - f:/applicationdata/filrouge/data:/data
+          - f:/applicationdata/filrouge/data:/data
         ports:
-            - "5555:5550"
+          - "5550-5551:5550"
+
+
+    nginx:
+      image: nginx:latest
+      volumes:
+        - f:/applicationdata/filrouge/data:/data/nginx.conf:ro
+      depends_on:
+        - filrouge
+      ports:
+        - "5550:5550"
+        
+networks:
+  default:
+    driver: bridge
+    name: filrouge

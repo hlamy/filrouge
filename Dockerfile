@@ -1,16 +1,19 @@
 FROM python:3.7
 
 
-ADD main.py /
-ADD flaskroutes.py /
-ADD settings.py /
-ADD utilities.py /
+COPY main.py /
+COPY flaskroutes.py /
+COPY settings.py /
+COPY utilities.py /
 
-RUN pip install flask
-RUN pip install pathlib
-RUN pip install celery
-RUN pip install pillow
-RUN pip install filemagic
-RUN pip install filetype
 
-CMD [ "python", "./main.py" ]
+RUN pip3 install flask
+RUN pip3 install setuptools
+RUN pip3 install pathlib
+RUN pip3 install celery
+RUN pip3 install pillow
+RUN pip3 install python-magic
+RUN pip3 install libmagic
+RUN pip3 install filetype
+
+CMD [ "python3", "./main.py" ]

@@ -36,9 +36,31 @@ Le lancement de celle-ci verra la création, s'il n'existent pas déjà, des dossie
 
 L'environnement virtuel est présent dans le dossier /venv au besoin.
 
+###########
+
+docker container ls
+
+docker stop strange_shockley
+
+docker build -t filrouge .
+
+docker run -p 5550:5555 -v "f:/applicationdata/":/temp filrouge
+
+curl -F file="@test.docx" -X POST http://127.0.0.1:5555/upload
+
+kubectl delete -n default deployment filrouge
+
+kubectl get deployments --all-namespaces
+
+kubectl get pods
+
+docker-compose up --scale filrouge=2
+
+
 ### Tests ####
 
-Les fichiers restants sont eux indispensables pour réaliser les tests de fonctionnement : test_pichandler.py réalise les tests sur les fonctions de pichandler.py alors que test_hlamy_main teste lui l'application web. Le dossier tests et ses sous-dossiers contiennent des données controlées destinées à vérifier le bon retour de l'application lors de l'envoi de ces documents.
+Les fichiers restants sont eux indispensables
+ pour réaliser les tests de fonctionnement : test_pichandler.py réalise les tests sur les fonctions de pichandler.py alors que test_hlamy_main teste lui l'application web. Le dossier tests et ses sous-dossiers contiennent des données controlées destinées à vérifier le bon retour de l'application lors de l'envoi de ces documents.
 
 
 ### Mise en route de l'application ###

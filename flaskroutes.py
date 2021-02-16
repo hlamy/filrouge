@@ -51,12 +51,17 @@ def uploadfile():
         fichierclient.save(temporary_files_folder / Path(idfile))
     except:
         fichierclient.close()
-        return {'Error' : 'saving problem'}, 500
+        return {'Error' : 'file saving problem'}, 500
     
+    # extraction des métadonnées, 
+    # puis insertion de celles-ci dans le dictionnaire
     try:
         datafile = utilities.extractgenericmetadata(datafile)
     except:
         return {'Error' : 'could not extract metadata'}, 500
+    
+    # extraction et encodage du fichier en base 64, 
+    # pour insertion dans le dictionnaire datafile
     try:
         datafile = utilities.code64fichier(datafile)
     except:
@@ -65,4 +70,5 @@ def uploadfile():
     # fermeture du fichier
     fichierclient.close()
 
+    # renvoi du dictionnaire sous forme d'un fichier texte JSON
     return datafile

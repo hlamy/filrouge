@@ -1,0 +1,35 @@
+apiVersion: v2
+kind: Service
+metadata:
+  name: filrouge-service
+spec:
+  selector:
+    app: filrouge
+  ports:
+  - protocol: "TCP"
+    port: 5550
+    targetPort: 5555
+  type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filrouge
+spec:
+  selector:
+    matchLabels:
+      app: filrouge
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: filrouge
+    spec:
+      containers:
+      - name: filrouge
+        image: filrouge:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5555
