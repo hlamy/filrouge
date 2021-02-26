@@ -1,3 +1,8 @@
 flask
 pillow
 pathlib
+celery
+filetype
+libmagic
+python-magic
+setuptools
