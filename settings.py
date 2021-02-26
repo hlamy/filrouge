@@ -46,7 +46,7 @@ def writesettings():
     return True
 
 
-temporary_files_folder, applicationportnumber = readsettings()
+# temporary_files_folder, applicationportnumber = readsettings()
 
 
 
