@@ -6,3 +6,4 @@ filetype
 libmagic
 python-magic
 setuptools
+boto3

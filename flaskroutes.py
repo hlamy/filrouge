@@ -46,6 +46,9 @@ def uploadfile():
     idfile = str(fichierclient.filename)
     datafile['id'] = idfile
 
+    # sauvegarde du fichier dans S3
+    utilities.saveFileInBucket(fichierclient, idfile)
+
     # sauvegarde du fichier temporairement sur disque
     try:
         fichierclient.save(temporary_files_folder / Path(idfile))

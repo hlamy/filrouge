@@ -1,7 +1,5 @@
 # utilities
 # coding=UTF-8
-# importation de celery pour gérer la concurence
-from celery import Celery
 # importation de datetime pour obtenir les informations sur l'heure
 from datetime import date, datetime
 import json
@@ -14,13 +12,13 @@ from filetype import guess
 import magic
 
 import settings
+import boto3
 
-appcelery = Celery('tasks', broker='redis://localhost', backend='redis://localhost')
 
 temporary_files_folder = settings.temporary_files_folder
 
 # code de création d'ajout dans le fichier json du fichier encodé en base64
-@appcelery.task
+
 def code64fichier(datafile):
     idfile = datafile['id']
     with open(temporary_files_folder / Path(idfile), 'rb') as fichier:
@@ -76,3 +74,18 @@ def extractgenericmetadata(datafile):
             datafile['guessed_type'] = 'broken'
 
     return datafile
+
+### POUR EVALUATION AWS ###
+# fonction de téléversement (à la française) d'un fichier dans le bucketS3
+def saveFileInBucket(fichier,nomfichier):
+    s3 = boto3.resource('s3')
+    s3.Object('filrouge.lmy.s3', nomfichier).put(Body=fichier)
+
+    return True
+
+# fonction de lecture d'un fichier depuis le bucketS3
+def readFileInBucket(nomfichier):
+    s3 = boto3.resource('s3')
+    fichier = s3.Object('filrouge.lmy.s3', nomfichier).get()
+    return True
+

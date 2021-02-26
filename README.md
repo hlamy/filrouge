@@ -14,13 +14,22 @@ Le développement a été effectué avec VS Code - l'environnement virtuel crée par 
 
 Cet outil d'extraction de métadonnées a été developpée sous windows et testé avec la distribution FreeBSD (système recommandé).
 
-Python 3.8, puis les librairies flask, pillow, celery et pathlib doivent être installées.
+Python 3.7, puis les librairies nécessaires doivent être installées. 
+
+##
+Le contenu du fichier zippé doit être dézippé dans le répertoire choisi par l'utilisateur pour faire fonctionner l'application, pour y déposer l'ensemble des scripts python nécessaire.
+
 
 # python3.7 : 
 installation via $ pkg install python37
 
 # pip : 
-installation via $ pkg install p737-pip
+installation via $ pkg insta
+
+# installation des librairies nécessaires :
+pip install -r requirements.txt
+
+## Ou librairie par librairie via :
 
 # flask library, 1.1.2 :
 installation via $ pip install flask
@@ -43,15 +52,13 @@ pkg install docker
 # installation de docker-machine
 pkg install docker-machine
 
-# installation de l'application
-Ensuite, le contenu du fichier zippé doit être dézippé dans le répertoire choisi par l'utilisateur pour faire fonctionner l'application. En pratique, seulement les fichiers "launcher.py", "hlamy_main.py", et "pichandler.py" sont nécessaires à minima pour faire fonctionner l'application. 
+# installation de virtualbox-ose
+pkg install virtualbox-ose
 
-Le lancement de celle-ci verra la création, s'il n'existent pas déjà, des dossiers /metadata, /pictures, /temp et /thumbnail. Ceux-ci contiendront les fichiers nécessaires à l'application.
-
-L'environnement virtuel est présent dans le dossier /venv au besoin.
 
 ____________________________________
 
+Comamndes utiles:
 docker container ls
 
 docker stop strange_shockley
@@ -60,7 +67,7 @@ docker build -t filrouge .
 
 docker run -p 5550:5555 -v "f:/applicationdata/":/temp filrouge
 
-curl -F file="@test.docx" -X POST http://127.0.0.1:5555/upload
+curl -F file="@test.docx" -X POST http://filrouge.lmy.p2021.ajoga.fr:5555/upload
 
 kubectl delete -n default deployment filrouge
 
@@ -104,18 +111,16 @@ Le bon accès a la page racine http://localhost:5000/ confirme le bon fonctionnem
 # Voici quelques requêtes CURL utilisables pour atteindre l'application via ses API :
 
 # possible requete CURL pour envoyer un fichier:
-curl -F file="@test.pdf" -X POST http://127.0.0.1:5555/upload
+curl -F file="@test.pdf" -X POST http://filrouge.lmy.p2021.ajoga.fr:5555/upload
 
 ### 'obsolete'
 # possible requete CURL pour récupérer les métadonnées de l'image :
-curl http://127.0.0.1:5000/images/<pictureID>
+curl http://filrouge.lmy.p2021.ajoga.fr:5000/images/<pictureID>
 
-# possible requete CURL pour récupérer le thumbnail de l'image, sauvegardé dans le dossier courant :
-curl --output <pictureID>.jpg http://127.0.0.1:5000/thumbnails/<pictureID>.jpg
 
 
 #### limitations : ####
-
+(obsolete)
 - Les fichiers "texture" ne sont pas pris en compte, ce ne sont pas des formats d'image ;
 - Les fichiers "logiciel de retouche" ne sont pas pris en compte, ce ne sont pas des formats d'image ;
 - Les fichiers '.gif' ne sont pas compatible avec l'application ;
