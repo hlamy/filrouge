@@ -3,20 +3,24 @@
 # Hugues LAMY
 
 
-#### Description ####
+## Description
 
 Ceci est une application écrite dans le cadre du mastère SIO 2021 de CentraleSupélec, par l'élève Hugues LAMY.
 Elle permet de générer un fichier JSON contenant un fichier et ses métadonnées, à partir de ce du fichier fourni par l'utilisateur, via une API de type REST.
 
 Le développement a été effectué avec VS Code - l'environnement virtuel crée par celui-ci est dans le dossier /venv.
 
-#### Installation ####
+## Installation
 
-Cet outil de génération de thumbnail a été developpé sous windows et testé avec la distribution "DEBIAN" de GNU/LINUX (système recommandé).
+Cet outil d'extraction de métadonnées a été developpée sous windows et testé avec la distribution FreeBSD (système recommandé).
 
 Python 3.8, puis les librairies flask, pillow, celery et pathlib doivent être installées.
 
-# python : python 3.8
+# python3.7 : 
+installation via $ pkg install python37
+
+# pip : 
+installation via $ pkg install p737-pip
 
 # flask library, 1.1.2 :
 installation via $ pip install flask
@@ -30,13 +34,23 @@ installation via $ pip install celery
 # pathlib library, 1.0.1
 installation via $ pip install pathlib
 
+# paramiko library
+installation via $ pip install paramiko
+
+# installation de docker
+pkg install docker
+
+# installation de docker-machine
+pkg install docker-machine
+
+# installation de l'application
 Ensuite, le contenu du fichier zippé doit être dézippé dans le répertoire choisi par l'utilisateur pour faire fonctionner l'application. En pratique, seulement les fichiers "launcher.py", "hlamy_main.py", et "pichandler.py" sont nécessaires à minima pour faire fonctionner l'application. 
 
 Le lancement de celle-ci verra la création, s'il n'existent pas déjà, des dossiers /metadata, /pictures, /temp et /thumbnail. Ceux-ci contiendront les fichiers nécessaires à l'application.
 
 L'environnement virtuel est présent dans le dossier /venv au besoin.
 
-###########
+____________________________________
 
 docker container ls
 
