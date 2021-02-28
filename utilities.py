@@ -10,13 +10,11 @@ import os
 import base64
 from filetype import guess
 import magic
-
-import settings
 import boto3
 
 
-temporary_files_folder = settings.temporary_files_folder
 
+temporary_files_folder = './temp'
 # code de création d'ajout dans le fichier json du fichier encodé en base64
 
 def code64fichier(datafile):

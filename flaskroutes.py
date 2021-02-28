@@ -14,16 +14,15 @@ from pathlib import Path
 # importation des fonctions de traitement des fichiers
 import utilities
 
-
+# creation de l'application Flask
 app = Flask(__name__)
 
 # récupération des données de configuration
-import settings
-temporary_files_folder = settings.temporary_files_folder
+temporary_files_folder = utilities.temporary_files_folder
 app.config['UPLOAD_FOLDER'] = temporary_files_folder
 
 
-# racine de l'application
+# racine de l'application, pour vérification du bon fonctionnement
 @app.route('/')
 def mainpage():
     greetingmessage = {'Status': 'Server is up and running'}
@@ -36,7 +35,6 @@ def uploadfile():
     idfile = 'testouille'
     
     # essai de chargement du fichier fourni par le client. Si NOK, retour d'une erreur
-    
     try:
        fichierclient = request.files['file']
     except:
@@ -47,7 +45,13 @@ def uploadfile():
     datafile['id'] = idfile
 
     # sauvegarde du fichier dans S3
-    utilities.saveFileInBucket(fichierclient, idfile)
+    # l'exception est indispensable (au 27 fev 2021) pour gérer le manque de credentials aws dans docker (en cours d'investigation)
+    # s3 = True si sauvegarde dans S3 ok, sinon False
+    try :
+        datafile['s3'] = utilities.saveFileInBucket(fichierclient, idfile)
+    except:
+        datafile['s3'] = False
+
 
     # sauvegarde du fichier temporairement sur disque
     try:

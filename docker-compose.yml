@@ -5,20 +5,13 @@ services:
         build: .
         volumes :
           - f:/applicationdata/filrouge/data:/data
+          - $HOME/.aws:/root/.aws:ro
         ports:
-          - "5550-5551:5550"
-
-
+          - "5555-5559:25252"
+ 
     nginx:
-      image: nginx:latest
-      volumes:
-        - f:/applicationdata/filrouge/data:/data/nginx.conf:ro
-      depends_on:
-        - filrouge
-      ports:
-        - "5550:5550"
-        
-networks:
-  default:
-    driver: bridge
-    name: filrouge
+        build: ./nginx
+        ports:
+          - "5550:80"
+        depends_on:
+          - filrouge

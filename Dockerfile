@@ -3,9 +3,7 @@ FROM python:3.7
 
 COPY main.py /
 COPY flaskroutes.py /
-COPY settings.py /
 COPY utilities.py /
-
 
 RUN pip3 install flask
 RUN pip3 install setuptools
@@ -15,5 +13,6 @@ RUN pip3 install pillow
 RUN pip3 install python-magic
 RUN pip3 install libmagic
 RUN pip3 install filetype
+RUN pip3 install boto3
 
-CMD [ "python3", "./main.py" ]
+CMD [ "python3", "./main.py", "25252"  ]

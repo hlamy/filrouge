@@ -4,7 +4,7 @@ import json
 import os
 
 # dossiers nécessaires au bon fonctionnement
-temporary_files_folder = './temp'
+
 
 # pictures_folder = Path('./pictures')
 # alerts_folder = Path('./alerts')
@@ -15,6 +15,7 @@ temporary_files_folder = './temp'
 # passwordpath = passwordfolder / passwordfile
 
 # port d'accès à l'application
+
 applicationportnumber = '5555'
 
 

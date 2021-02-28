@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+    filrouge:
+        build: .
+        environment:
+          - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+          - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        volumes :
+          - f:/applicationdata/filrouge/data:/data
+        ports:
+          - "5555-5556:25252"
+
+
+    nginx:
+      image: nginx:latest
+      volumes:
+        - f:/applicationdata/filrouge/data:/data/nginx.conf:ro
+      depends_on:
+        - filrouge
+      ports:
+        - "5550:5550"
+        
+networks:
+  default:
+    driver: bridge
+    name: filrouge
