@@ -5,7 +5,7 @@ services:
         build: .
         volumes :
           - f:/applicationdata/filrouge/data:/data
-          - $HOME/.aws:/root/.aws:ro
+          - $HOME/.aws:/app/.aws:ro
         ports:
           - "5555-5559:25252"
  

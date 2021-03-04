@@ -1,6 +1,5 @@
 FROM python:3.7
 
-
 COPY main.py /
 COPY flaskroutes.py /
 COPY utilities.py /

@@ -24,7 +24,7 @@ Le contenu du fichier zippé doit être dézippé dans le répertoire choisi par l'ut
 installation via $ pkg install python37
 
 # pip : 
-installation via $ pkg insta
+installation via $ pkg install
 
 # installation des librairies nécessaires :
 pip install -r requirements.txt
@@ -65,9 +65,9 @@ docker stop strange_shockley
 
 docker build -t filrouge .
 
-docker run -p 5550:5555 -v "f:/applicationdata/":/temp filrouge
+docker run -p 5555:25252 -v "f:/applicationdata/":/temp filrouge
 
-curl -F file="@test.docx" -X POST http://filrouge.lmy.p2021.ajoga.fr:5555/upload
+curl -F file="@test.docx" -X POST http://127.0.0.1:5555/upload
 
 kubectl delete -n default deployment filrouge
 
@@ -75,7 +75,18 @@ kubectl get deployments --all-namespaces
 
 kubectl get pods
 
-docker-compose up --scale filrouge=2
+docker-compose up --scale filrouge=2 --build filrouge
+
+
+##
+
+AWS_ACCESS_KEY_ID=$(aws --profile default configure get aws_access_key_id)
+AWS_SECRET_ACCESS_KEY=$(aws --profile default configure get aws_secret_access_key)
+
+docker build -t filrouge .
+docker run -it --rm \
+   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+   -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 
 
 ### Tests ####
@@ -119,9 +130,5 @@ curl http://filrouge.lmy.p2021.ajoga.fr:5000/images/<pictureID>
 
 
 
-#### limitations : ####
-(obsolete)
-- Les fichiers "texture" ne sont pas pris en compte, ce ne sont pas des formats d'image ;
-- Les fichiers "logiciel de retouche" ne sont pas pris en compte, ce ne sont pas des formats d'image ;
-- Les fichiers '.gif' ne sont pas compatible avec l'application ;
+#### limitations (obsolete, à mettre à jour: ####
 - un maximum de 9 millions de fichiers sont envoyables sur l'application (ceci pour rester raisonnable : il est possible d'augmenter cette taille dans le programme si cela est désiré, mais hors des enjeux d'une application scolaire).
