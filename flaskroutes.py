@@ -55,7 +55,7 @@ def uploadfile():
     # l'exception est indispensable (au 27 fev 2021) pour gérer le manque de credentials aws dans docker (en cours d'investigation)
     # s3 = True si sauvegarde dans S3 ok, sinon False
     try :
-        datafile['s3'] = utilities.saveFileInBucket(fichierclient, idfile)
+        datafile['s3'] = utilities.saveFileInBucket(fichierclient, randomUID)
     except:
         datafile['s3'] = False
 
@@ -87,7 +87,7 @@ def uploadfile():
         medatafile = tables.extractmetadata(medatafile, filepath)
     except:
         pass
-    
+
     datafile['metadata'] = metadatafile
 
     # extraction et encodage du fichier en base 64, 
