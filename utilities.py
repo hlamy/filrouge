@@ -38,7 +38,7 @@ def extractgenericmetadata(datafile, metadatafile, filepath):
 
     # donne le nom et l'extension du fichier tels qu'envoyés
     try:
-        nomfichier, extensionfichier = os.path.splitext(datafile['given_name'])
+        nomfichier, extensionfichier = os.path.splitext(filepath)
         
     except:
         nomfichier = None
