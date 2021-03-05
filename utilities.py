@@ -24,7 +24,7 @@ def code64fichier(filepath):
     return str(encodedfile)
 
 
-def extractgenericmetadata(datafile, metadatafile, filepath):
+def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
     # création du chemin du fichier (lorsque stocké dans le dossier temporaire)
     # filepath = temporary_files_folder / Path(datafile['given_name'])
 
@@ -38,8 +38,7 @@ def extractgenericmetadata(datafile, metadatafile, filepath):
 
     # donne le nom et l'extension du fichier tels qu'envoyés
     try:
-        nomfichier, extensionfichier = os.path.splitext(filepath)
-        
+        nomfichier, extensionfichier = os.path.splitext(original_filepath)
     except:
         nomfichier = None
         extensionfichier = None
