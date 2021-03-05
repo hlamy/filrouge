@@ -7,47 +7,46 @@ from pathlib import Path
 # si besoin de crypto : importation fernet
 # from cryptography.fernet import Fernet
 import os
+from os import walk, remove
 import base64
 from filetype import guess
 import magic
 import boto3
-
+import pictures
 
 
 temporary_files_folder = './temp'
 # code de création d'ajout dans le fichier json du fichier encodé en base64
 
-def code64fichier(datafile):
-    idfile = datafile['id']
-    with open(temporary_files_folder / Path(idfile), 'rb') as fichier:
+def code64fichier(filepath):
+    with open(filepath, 'rb') as fichier:
         encodedfile = base64.b64encode(fichier.read())
-        datafile['file'] = str(encodedfile)
-    return datafile
+    return str(encodedfile)
 
 
-def extractgenericmetadata(datafile):
+def extractgenericmetadata(datafile, metadatafile, filepath):
     # création du chemin du fichier (lorsque stocké dans le dossier temporaire)
-    filepath = temporary_files_folder / Path(datafile['id'])
+    # filepath = temporary_files_folder / Path(datafile['given_name'])
 
     # donne la taille du fichier
     try:
         size = os.path.getsize(filepath)
     except:
         size = None 
-    datafile['size'] = size
+    metadatafile['size'] = size
 
 
     # donne le nom et l'extension du fichier tels qu'envoyés
     try:
-        nomfichier, extensionfichier = os.path.splitext(filepath)
+        nomfichier, extensionfichier = os.path.splitext(datafile['given_name'])
         
     except:
         nomfichier = None
         extensionfichier = None
 
     # ajoute le nom et l'extension dans le dictionnaire
-    datafile['name'] = nomfichier
-    datafile['given_extension'] = extensionfichier
+    metadatafile['name'] = os.path.basename(nomfichier)
+    metadatafile['given_extension'] = extensionfichier
 
     # donne la date de derniere modification du fichier
     try:
@@ -55,7 +54,7 @@ def extractgenericmetadata(datafile):
     except:
         time = None
     
-    datafile['datemodified'] = time
+    metadatafile['datemodified'] = time
 
     # donne le type du fichier
 
@@ -63,15 +62,22 @@ def extractgenericmetadata(datafile):
     try:
         mime = magic.Magic(mime=True)
         typeoffile = mime.from_file(str(filepath))
-        datafile['guessed_type'] = typeoffile
+        metadatafile['guessed_type'] = typeoffile
     except:
         try:
             typeoffile = guess(str(filepath))
-            datafile['guessed_type'] = typeoffile
+            metadatafile['guessed_type'] = typeoffile
         except :
-            datafile['guessed_type'] = 'broken'
+            metadatafile['guessed_type'] = 'broken'
 
-    return datafile
+    return metadatafile
+
+# fonction de nettoyage des fichiers temporaires
+def remove_temp_data(filepath):
+    try:
+        remove(str(filepath))
+    except:
+        pass
 
 ### POUR EVALUATION AWS ###
 # fonction de téléversement (à la française) d'un fichier dans le bucketS3
@@ -85,5 +91,5 @@ def saveFileInBucket(fichier,nomfichier):
 def readFileInBucket(nomfichier):
     s3 = boto3.resource('s3')
     fichier = s3.Object('filrouge.lmy.s3', nomfichier).get()
-    return True
+    return fichier
 

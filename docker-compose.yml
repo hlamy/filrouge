@@ -4,10 +4,10 @@ services:
     filrouge:
         build: .
         volumes :
-          - f:/applicationdata/filrouge/data:/data
+          - $HOME/data:/
           - $HOME/.aws:/app/.aws:ro
         ports:
-          - "5555-5559:25252"
+          - "5555-5555:25252"
  
     nginx:
         build: ./nginx
