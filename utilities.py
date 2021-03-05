@@ -45,9 +45,10 @@ def extractgenericmetadata(datafile, metadatafile, filepath):
         extensionfichier = None
 
     # ajoute le nom et l'extension dans le dictionnaire
-    metadatafile['name'] = os.path.basename(nomfichier)
-    metadatafile['given_extension'] = extensionfichier
-
+    try:
+        metadatafile['given_extension'] = extensionfichier
+    except:
+        pass
     # donne la date de derniere modification du fichier
     try:
         time = os.path.getmtime(filepath) 
