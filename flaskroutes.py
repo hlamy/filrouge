@@ -43,7 +43,7 @@ def uploadfile():
     except:
         return {'Error' : 'picture upload problem'}, 500
     
-    randomUID = uuid.uuid4()
+    randomUID = str(uuid.uuid4())
     # récupération du nom de fichier
     idfilename = str(fichierclient.filename)
     metadatafile['given_name'] = idfilename
@@ -59,6 +59,7 @@ def uploadfile():
     except:
         datafile['s3'] = False
 
+    datafile['s3'] = utilities.saveFileInBucket(fichierclient, randomUID)
 
     # sauvegarde du fichier temporairement sur disque
     try:
