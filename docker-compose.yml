@@ -4,7 +4,7 @@ services:
     filrouge:
         build: .
         volumes :
-          - $HOME/data:/
+          - $HOME/data:/data
           - $HOME/.aws:/app/.aws:ro
         ports:
           - "5555-5555:25252"
