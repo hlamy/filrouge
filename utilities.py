@@ -54,7 +54,7 @@ def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
     except:
         time = None
     
-    metadatafile['datemodified'] = time
+    metadatafile['datemodified'] = str(datetime.fromtimestamp(time))
 
     # donne le type du fichier
 
@@ -81,10 +81,9 @@ def remove_temp_data(filepath):
 
 ### POUR EVALUATION AWS ###
 # fonction de téléversement (à la française) d'un fichier dans le bucketS3
-def saveFileInBucket(fichier,nomfichier):
+def saveFileInBucket(nomfichier):
     s3 = boto3.resource('s3')
-    s3.Object('filrouge.lmy.s3', nomfichier).put(Body=fichier)
-
+    s3.Object('filrouge.lmy.s3', nomfichier).upload_file(Filename=nomfichier)
     return True
 
 # fonction de lecture d'un fichier depuis le bucketS3

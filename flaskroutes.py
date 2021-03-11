@@ -54,18 +54,16 @@ def uploadfile():
     # genere un ID aléatoire unique
     datafile['uuid'] = randomUID
 
-
-
+    try:
+        fichier = utilities.readFileInBucket(randomUID)
+    except:
+        pass
     # sauvegarde du fichier temporairement sur disque
 
     try:
-        fichierclient.save(temporary_files_folder / Path(randomUID))
+        fichierclient.save(filepath)
     except:
-        fichierclient.close()
         return {'Error' : 'file saving problem'}, 500
-
-
-    
 
     # extraction des métadonnées génériques,
     # puis insertion de celles-ci dans le dictionnaire
@@ -87,11 +85,20 @@ def uploadfile():
         metadatafile['broad_type'] = 'texte'
     except:
         pass
-
-    # extraction des métadata concernant spécifiquement les tableaux
+    
+    # extraction des données issues d'un document pdf
     try:
-        metadatafile = tables.extractmetadata(metadatafile, filepath)
-        metadatafile['broad_type'] = 'tableau'
+        metadatafile = texte.extractmetadata_pdf(metadatafile, filepath)
+        metadatafile['broad_type'] = 'texte'
+    except:
+        pass
+
+
+    # extraction des métadata concernant spécifiquement les tableaux csv
+    try:
+        if metadatafile['given_extension'] == '.csv':
+            metadatafile = tables.extractmetadata(metadatafile, filepath)
+            metadatafile['broad_type'] = 'tableau'
     except:
         pass
     
@@ -109,12 +116,12 @@ def uploadfile():
     # l'exception est indispensable (au 27 fev 2021) pour gérer le manque de credentials aws dans docker (problème résolu sous EC2 AWS / UBUNTU)
     # s3 = True si sauvegarde dans S3 ok, sinon False
     try :
-        datafile['s3'] = utilities.saveFileInBucket(fichierclient, randomUID)
+        # fichier = open(filepath, 'r')
+        datafile['s3'] = utilities.saveFileInBucket(filepath)
     except:
         datafile['s3'] = False
 
     # fermeture du fichier
-    fichierclient.close()
     utilities.remove_temp_data(filepath)
 
     # renvoi du dictionnaire sous forme d'un fichier texte JSON
