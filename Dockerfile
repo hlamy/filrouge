@@ -8,6 +8,7 @@ COPY utilities.py /
 COPY pictures.py /
 COPY tables.py /
 COPY texte.py /
+COPY rekognition_objects.py /
 
 RUN pip3 install -r requirements.txt
 
