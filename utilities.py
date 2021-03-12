@@ -73,7 +73,7 @@ def verifypassword(user, pswd):
     credential = []
     user2, pswd2 = 'arg', 'boum'
     try:
-        with open('/app/.aws/auth', "r") as filepswd:
+        with open('/.auth/auth', "r") as filepswd:
 
             credential = filepswd.readlines()
 
