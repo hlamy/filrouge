@@ -11,6 +11,6 @@ services:
     nginx:
         build: ./nginx
         ports:
-          - "5550:80"
+          - "5550:443"
         depends_on:
           - filrouge
