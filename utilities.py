@@ -4,8 +4,6 @@
 from datetime import date, datetime
 import json
 from pathlib import Path
-# si besoin de crypto : importation fernet
-# from cryptography.fernet import Fernet
 import os
 from os import walk, remove
 import base64
