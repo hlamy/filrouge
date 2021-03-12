@@ -1,9 +1,11 @@
 flask
-pillow
+setuptools
 pathlib
 celery
-filetype
-libmagic
+pillow
 python-magic
-setuptools
+libmagic
+filetype
 boto3
+pandas
+PyPDF2

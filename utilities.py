@@ -15,7 +15,7 @@ import boto3
 import pictures
 
 
-temporary_files_folder = './temp'
+temporary_files_folder = './datafilrouge'
 # code de création d'ajout dans le fichier json du fichier encodé en base64
 
 def code64fichier(filepath):
@@ -33,7 +33,7 @@ def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
         size = os.path.getsize(filepath)
     except:
         size = None 
-    metadatafile['size'] = size
+    metadatafile['generic_size'] = size
 
 
     # donne le nom et l'extension du fichier tels qu'envoyés
@@ -45,7 +45,7 @@ def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
 
     # ajoute le nom et l'extension dans le dictionnaire
     try:
-        metadatafile['given_extension'] = extensionfichier
+        metadatafile['generic_given_extension'] = extensionfichier
     except:
         pass
     # donne la date de derniere modification du fichier
@@ -54,21 +54,19 @@ def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
     except:
         time = None
     
-    metadatafile['datemodified'] = str(datetime.fromtimestamp(time))
+    metadatafile['generic_datemodified'] = str(datetime.fromtimestamp(time))
 
     # donne le type du fichier
-
-        
     try:
         mime = magic.Magic(mime=True)
         typeoffile = mime.from_file(str(filepath))
-        metadatafile['guessed_type'] = typeoffile
+        metadatafile['generic_guessed_type'] = typeoffile
     except:
         try:
             typeoffile = guess(str(filepath))
-            metadatafile['guessed_type'] = typeoffile
+            metadatafile['generic_guessed_type'] = typeoffile
         except :
-            metadatafile['guessed_type'] = 'broken'
+            metadatafile['generic_guessed_type'] = 'broken'
 
     return metadatafile
 

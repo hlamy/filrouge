@@ -3,7 +3,7 @@
 import PyPDF2 as pdf
 
 
-
+# fonction d'extraction des métadonnées issues d'un fichier texte
 def extractmetadata(metadata, filepath):
     
     nbr_lignes = 0
@@ -12,11 +12,9 @@ def extractmetadata(metadata, filepath):
 
     metadata['texte_nbr_lignes'] = nbr_lignes
 
-
-
     return metadata
 
-
+# fonction d'extraction des métadonnées issues d'un fichier PDF
 def extractmetadata_pdf(metadata, filepath):
     document = open(filepath, "rb")
 
@@ -30,8 +28,10 @@ def extractmetadata_pdf(metadata, filepath):
     
     try:
         author = pdfReader.author
+        
     except:
-        author = None
+        author = 'Unknown'
+    metadata['texte_author'] = author
     
     nbr_lignes = 0
     try:
@@ -44,5 +44,4 @@ def extractmetadata_pdf(metadata, filepath):
 
     metadata['texte_nbr_lignes'] = nbr_lignes
    
-
     return metadata

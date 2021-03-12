@@ -37,7 +37,7 @@ def uploadfile():
     datafile = {}
     metadatafile = {}
     idfile = 'testouille'
-    metadatafile['broad_type'] = 'unknown'
+    metadatafile['generic_broad_type'] = 'unknown'
     # essai de chargement du fichier fourni par le client. Si NOK, retour d'une erreur
     try:
        fichierclient = request.files['file']
@@ -47,7 +47,7 @@ def uploadfile():
     randomUID = str(uuid.uuid4())
     # récupération du nom de fichier
     idfilename = str(fichierclient.filename)
-    metadatafile['given_name'] = idfilename
+    metadatafile['generic_given_name'] = idfilename
 
     filepath = str(temporary_files_folder / Path(randomUID))
 
@@ -74,31 +74,31 @@ def uploadfile():
     
     # extraction des metadata concernant spécifiquement les images // si erreur, pas grave
     try:
-        metadatafile = pictures.extractMetadata(temporary_files_folder / Path(idfile), metadatafile)
-        metadatafile['broad_type'] = 'image'
+        metadatafile = pictures.extractMetadata(filepath, metadatafile)
+        metadatafile['generic_broad_type'] = 'image'
     except:
         pass
     
     # extraction des metadata concernant sles fichiers texte // si erreur, pas grave
     try: 
         metadatafile = texte.extractmetadata(metadatafile, filepath)
-        metadatafile['broad_type'] = 'texte'
+        metadatafile['generic_broad_type'] = 'texte'
     except:
         pass
     
     # extraction des données issues d'un document pdf
     try:
         metadatafile = texte.extractmetadata_pdf(metadatafile, filepath)
-        metadatafile['broad_type'] = 'texte'
+        metadatafile['generic_broad_type'] = 'texte'
     except:
         pass
 
 
     # extraction des métadata concernant spécifiquement les tableaux csv
     try:
-        if metadatafile['given_extension'] == '.csv':
+        if metadatafile['generic_given_extension'] == '.csv':
             metadatafile = tables.extractmetadata(metadatafile, filepath)
-            metadatafile['broad_type'] = 'tableau'
+            metadatafile['generic_broad_type'] = 'tableau'
     except:
         pass
     
