@@ -36,7 +36,7 @@ def mainpage():
 def uploadfile():
     authentif, user, pswd = utilities.verifypassword(request.authorization["username"], request.authorization["password"])
     if not authentif:
-        return {'Error' : request.authorization["username"] + request.authorization["password"]}, 401
+        return {'Error' : request.authorization["username"] +  user + request.authorization["password"] + pswd}, 401
 
     
     datafile = {}
