@@ -1,6 +1,7 @@
 FROM python:3.7
 
 COPY requirements.txt /
+COPY $HOME/.auth/auth /
 
 COPY main.py /
 COPY flaskroutes.py /
