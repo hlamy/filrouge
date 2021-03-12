@@ -34,9 +34,9 @@ def mainpage():
 
 @app.route('/upload', methods=['POST'])
 def uploadfile():
-    authentif, user, pswd = utilities.verifypassword(request.authorization["username"], request.authorization["password"])
+    authentif = utilities.verifypassword(request.authorization["username"], request.authorization["password"])
     if not authentif:
-        return {'Error' : request.authorization["username"] +  user + request.authorization["password"] + pswd}, 401
+        return {'Error' : 'Failed Authorisation'}, 401
 
     
     datafile = {}
