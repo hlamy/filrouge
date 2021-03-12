@@ -10,7 +10,9 @@ from os.path import isfile, join
 # importation de json pour générer les fichiers de métadonnées
 import json
 from random import randint
-
+# importation d'éléments fourni par AWS pour l'utilisation du service Rekognition
+from rekognition_objects import RekognitionText
+import boto3
 
 # fonction d'ouverture et d'extraction des métadonnées d'une image:
 def extractMetadata(picturepath, metadata):
@@ -34,9 +36,8 @@ def extractMetadata(picturepath, metadata):
                 # Une métadonnée pour signifier que les métadonnées de type photographique EXIF n'ont pu être récupérées
                 metadata['picture_EXIF'] = False
 
-    # En cas d'erreur en entrée/sortie (impossible d'ouvrir l'image), le système retourne une erreur dans le dictionnaire de métadonnée :
-    # except IOError:
-    #     pass
+    metadata['picture_textFoundByAwsRekognition'] = str(trouve_text(picturepath))
+
 
     return metadata
 
@@ -52,5 +53,64 @@ def convertvalue(value):
             pass
     return None
 
+# Classe de détection de texte dans une image, construite a partir de code récupéré sur les tutoriels AWS
+class RekognitionImage:
+    """
+    Encapsulates an Amazon Rekognition image. This class is a thin wrapper
+    around parts of the Boto3 Amazon Rekognition API.
+    """
+    def __init__(self, image, image_name, rekognition_client):
+        """
+        Initializes the image object.
 
+        :param image: Data that defines the image, either the image bytes or
+                      an Amazon S3 bucket and object key.
+        :param image_name: The name of the image.
+        :param rekognition_client: A Boto3 Rekognition client.
+        """
+        self.image = image
+        self.image_name = image_name
+        self.rekognition_client = rekognition_client
+    
+    @classmethod
+    def from_file(cls, image_file_name, rekognition_client, image_name=None):
+        """
+        Creates a RekognitionImage object from a local file.
+
+        :param image_file_name: The file name of the image. The file is opened and its
+                                bytes are read.
+        :param rekognition_client: A Boto3 Rekognition client.
+        :param image_name: The name of the image. If this is not specified, the
+                           file name is used as the image name.
+        :return: The RekognitionImage object, initialized with image bytes from the
+                 file.
+        """
+        with open(image_file_name, 'rb') as img_file:
+            image = {'Bytes': img_file.read()}
+        name = image_file_name if image_name is None else image_name
+        return cls(image, name, rekognition_client)
+
+    def detect_text(self):
+        """
+        Detects text in the image.
+        :return The list of text elements found in the image.
+        """
+        try:
+            response = self.rekognition_client.detect_text(Image=self.image)
+            texts = [RekognitionText(text) for text in response['TextDetections']]
+        except:
+            pass
+        else:
+            return texts
+
+# fonction de recherche de texte
+def trouve_text(filepath):
+    rekognition_client = boto3.client('rekognition')
+
+    imageCherchable = RekognitionImage.from_file(filepath, rekognition_client)
+    textes = imageCherchable.detect_text()
+
+    text_string = str(textes[0].to_dict()['text'])
+    
+    return  text_string
 

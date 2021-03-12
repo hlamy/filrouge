@@ -6,7 +6,7 @@ services:
         volumes :
           - $HOME/.aws:/app/.aws:ro
         ports:
-          - "5555-5559:25252"
+          - "5555-5559:5555"
  
     nginx:
         build: ./nginx
