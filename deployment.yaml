@@ -17,6 +17,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: filrouge
+  labels:
+    app: filrouge
 spec:
   selector:
     matchLabels:
@@ -32,4 +34,4 @@ spec:
         image: filrouge:latest
         imagePullPolicy: Never
         ports:
-        - containerPort: 5555
+        - containerPort: 25252

@@ -1,6 +1,6 @@
 # SIO_2021
 # Projet FIL ROUGE
-# Hugues LAMY
+### Hugues LAMY
 
 
 ## Description
@@ -16,49 +16,48 @@ Cet outil d'extraction de métadonnées a été developpée sous windows et testé ave
 
 Python 3.7, puis les librairies nécessaires doivent être installées. 
 
-##
 Le contenu du fichier zippé doit être dézippé dans le répertoire choisi par l'utilisateur pour faire fonctionner l'application, pour y déposer l'ensemble des scripts python nécessaire.
 
 
-# python3.7 : 
+### python3.7 : 
 installation via $ pkg install python37
 
-# pip : 
+### pip : 
 installation via $ pkg install
 
-# installation des librairies nécessaires :
+### installation des librairies nécessaires :
 pip install -r requirements.txt
 
 ## Ou librairie par librairie via :
 
-# flask library, 1.1.2 :
+### flask library, 1.1.2 :
 installation via $ pip install flask
 
-# pillow library, 8.0.1:
+### pillow library, 8.0.1:
 installation via $ pip install pillow
 
-# celery library, 5.0.5:
+### celery library, 5.0.5:
 installation via $ pip install celery
 
-# pathlib library, 1.0.1
+### pathlib library, 1.0.1
 installation via $ pip install pathlib
 
-# paramiko library
+### paramiko library
 installation via $ pip install paramiko
 
-# installation de docker
+### installation de docker
 pkg install docker
 
-# installation de docker-machine
+### installation de docker-machine
 pkg install docker-machine
 
-# installation de virtualbox-ose
+### installation de virtualbox-ose
 pkg install virtualbox-ose
 
 
 ____________________________________
 
-Comamndes utiles:
+## Commandes utiles:
 docker container ls
 
 docker stop strange_shockley
@@ -75,8 +74,23 @@ kubectl get deployments --all-namespaces
 
 kubectl get pods
 
-docker-compose up --scale filrouge=2 --build filrouge
+lancement du container via 
+docker-compose up --scale filrouge=5 --build filrouge nginx
 
+sudo snap install microk8s --classic
+sudo snap install microk8s --classic --channel=1.18/stable
+
+## processus de déploiement sur UBUNTU, sur Kubernetes MicroK8s :
+
+### récupération de la dernière version de l'application :
+git pull https://github.com/hlamy/filrouge main
+
+### construction des images filrouge et nginx :
+sudo docker build . -t filrouge
+sudo docker build . -t nginx
+
+### authorisation du registry de microk8s :
+sudo microk8s.enable registry
 
 ##
 
@@ -104,29 +118,19 @@ Ce script lancera un serveur flask accessible sur le port 5000, c'est à dire par
 Le bon accès a la page racine http://localhost:5000/ confirme le bon fonctionnement de l'application et donne les informations sur l'API.
 
 
-#### Les contrats API : ####
+## Les contrats API :
 
-/images/ + requete POST : permet d'envoyer une image sur le serveur. Les formats TIFF, BMP, PNG, JPG, JPEG et TGA sont supportés. un pictureID à 7 chiffres (compris entre 1000000 et 9999999) est renvoyé par l'application.
+/upload/ + requete POST : permet d'envoyer un fichier, les métadonnées et le fichier seront renvoyés en retour dans un format JSON
 
-/ + requête GET : racine, indique si le serveur tourne. Fourni aussi des indications concernant les contrats API.
-
-/images/<pictureID> + requête GET : donne les métadata de l'image considérée dans un fichier au format JSON. Si des données EXIF existent, elles y sont ajoutées. Sinon, seules des métadonnées basiques sont fournies (incluant un identifiant unique d'image généré par l'application ainsi que le chemin pour atteindre le thumbnail).
-
-/thumbnails/<pictureID>.jpg + requête GET : permet de récupérer le thumbnail de l'image demandée. 
-
-/delete/<pictureID> + requête DELETE : permet de supprimer les données issues du traitement d'une image (metadonnées, thumbnail, etc.).
+/ + requête GET : racine, indique si le serveur tourne.
 
 
-#### Requêtes CURL ####
+## Requêtes CURL
 
-# Voici quelques requêtes CURL utilisables pour atteindre l'application via ses API :
+Voici quelques requêtes CURL utilisables pour atteindre l'application via ses API
 
-# possible requete CURL pour envoyer un fichier:
+#### possible requete CURL pour envoyer un fichier:
 curl -F file="@test.pdf" -X POST http://filrouge.lmy.p2021.ajoga.fr:5555/upload
-
-### 'obsolete'
-# possible requete CURL pour récupérer les métadonnées de l'image :
-curl http://filrouge.lmy.p2021.ajoga.fr:5000/images/<pictureID>
 
 
 
