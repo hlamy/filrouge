@@ -68,23 +68,26 @@ def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
 
     return metadatafile
 
-
+# fonction simple de vérification des informations d'identification
 def verifypassword(user, pswd):
     credential = []
     try:
         with open('~/.aws/auth', "r") as filepswd:
 
             credential = filepswd.readlines()
-    
-    except:
-        try:
-            with open('C:/Users/hugue/.aws/auth', "r") as filepswd:
-                credential = filepswd.readlines()
-        
-        except:
-            return False
 
-    if user + '\n' == credential[0]  and pswd + '\n'== credential[1] :
+    except:
+         try:
+             with open('C:/Users/hugue/.aws/auth', "r") as filepswd:
+                 credential = filepswd.readlines()
+        
+         except:
+             return False
+    
+    print(user,credential[0].rstrip())
+    print(pswd,credential[1].rstrip())
+
+    if user.rstrip() == credential[0].rstrip()  and pswd.rstrip() == credential[1].rstrip() :
         return True
     
     else:
