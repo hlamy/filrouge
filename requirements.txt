@@ -1,7 +1,6 @@
 flask
 setuptools
 pathlib
-celery
 pillow
 python-magic
 libmagic
@@ -9,3 +8,4 @@ filetype
 boto3
 pandas
 PyPDF2
+PyJWT

@@ -34,6 +34,11 @@ def mainpage():
 
 @app.route('/upload', methods=['POST'])
 def uploadfile():
+    
+    if not utilities.verifypassword(request.authorization["username"], request.authorization["password"]):
+        return {'Error' : 'authentification incorrect'}, 401
+
+    
     datafile = {}
     metadatafile = {}
     idfile = 'testouille'

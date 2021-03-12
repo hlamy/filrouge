@@ -70,6 +70,28 @@ def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
 
     return metadatafile
 
+
+def verifypassword(user, pswd):
+    credential = []
+    try:
+        with open('~/.aws/auth', "r") as filepswd:
+
+            credential = filepswd.readlines()
+    
+    except:
+        try:
+            with open('C:/Users/hugue/.aws/auth', "r") as filepswd:
+                credential = filepswd.readlines()
+        
+        except:
+            return False
+
+    if user + '\n' == credential[0]  and pswd + '\n'== credential[1] :
+        return True
+    
+    else:
+        return False
+
 # fonction de nettoyage des fichiers temporaires
 def remove_temp_data(filepath):
     try:
@@ -89,5 +111,3 @@ def readFileInBucket(nomfichier):
     s3 = boto3.resource('s3')
     fichier = s3.Object('filrouge.lmy.s3', nomfichier).get()
     return fichier
-
-
