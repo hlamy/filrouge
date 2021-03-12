@@ -16,6 +16,7 @@ from pathlib import Path
 import utilities
 import pictures
 import tables
+import texte
 # creation de l'application Flask
 app = Flask(__name__)
 
@@ -36,7 +37,7 @@ def uploadfile():
     datafile = {}
     metadatafile = {}
     idfile = 'testouille'
-    
+    metadatafile['broad_type'] = 'unknown'
     # essai de chargement du fichier fourni par le client. Si NOK, retour d'une erreur
     try:
        fichierclient = request.files['file']
@@ -48,47 +49,59 @@ def uploadfile():
     idfilename = str(fichierclient.filename)
     metadatafile['given_name'] = idfilename
 
+    filepath = str(temporary_files_folder / Path(randomUID))
+
     # genere un ID aléatoire unique
     datafile['uuid'] = randomUID
 
-    # sauvegarde du fichier dans S3
-    # l'exception est indispensable (au 27 fev 2021) pour gérer le manque de credentials aws dans docker (en cours d'investigation)
-    # s3 = True si sauvegarde dans S3 ok, sinon False
-    try :
-        datafile['s3'] = utilities.saveFileInBucket(fichierclient, randomUID)
-    except:
-        datafile['s3'] = False
-
-    datafile['s3'] = utilities.saveFileInBucket(fichierclient, randomUID)
-
-    # sauvegarde du fichier temporairement sur disque
     try:
-        fichierclient.save(temporary_files_folder / Path(idfile))
-        filepath = str(temporary_files_folder / Path(idfile))
+        fichier = utilities.readFileInBucket(randomUID)
     except:
-        fichierclient.close()
+        pass
+    # sauvegarde du fichier temporairement sur disque
+
+    try:
+        fichierclient.save(filepath)
+    except:
         return {'Error' : 'file saving problem'}, 500
-    
-    # extraction des métadonnées, 
+
+    # extraction des métadonnées génériques,
     # puis insertion de celles-ci dans le dictionnaire
     try:
-        metadatafile = utilities.extractgenericmetadata(datafile, metadatafile, filepath)
+        metadatafile = utilities.extractgenericmetadata(datafile, metadatafile, filepath, idfilename)
     except:
         return {'Error' : 'could not extract metadata'}, 500
     
     # extraction des metadata concernant spécifiquement les images // si erreur, pas grave
     try:
         metadatafile = pictures.extractMetadata(temporary_files_folder / Path(idfile), metadatafile)
+        metadatafile['broad_type'] = 'image'
     except:
         pass
     
-
-    # extraction des métadata concernant spécifiquement les tableaux
+    # extraction des metadata concernant sles fichiers texte // si erreur, pas grave
+    try: 
+        metadatafile = texte.extractmetadata(metadatafile, filepath)
+        metadatafile['broad_type'] = 'texte'
+    except:
+        pass
+    
+    # extraction des données issues d'un document pdf
     try:
-        medatafile = tables.extractmetadata(medatafile, filepath)
+        metadatafile = texte.extractmetadata_pdf(metadatafile, filepath)
+        metadatafile['broad_type'] = 'texte'
     except:
         pass
 
+
+    # extraction des métadata concernant spécifiquement les tableaux csv
+    try:
+        if metadatafile['given_extension'] == '.csv':
+            metadatafile = tables.extractmetadata(metadatafile, filepath)
+            metadatafile['broad_type'] = 'tableau'
+    except:
+        pass
+    
     datafile['metadata'] = metadatafile
 
     # extraction et encodage du fichier en base 64, 
@@ -99,8 +112,16 @@ def uploadfile():
         return {'Error' : 'could not encode file'}, 500
 
 
+    # sauvegarde du fichier dans S3
+    # l'exception est indispensable (au 27 fev 2021) pour gérer le manque de credentials aws dans docker (problème résolu sous EC2 AWS / UBUNTU)
+    # s3 = True si sauvegarde dans S3 ok, sinon False
+    try :
+        # fichier = open(filepath, 'r')
+        datafile['s3'] = utilities.saveFileInBucket(filepath)
+    except:
+        datafile['s3'] = False
+
     # fermeture du fichier
-    fichierclient.close()
     utilities.remove_temp_data(filepath)
 
     # renvoi du dictionnaire sous forme d'un fichier texte JSON

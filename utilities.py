@@ -24,7 +24,7 @@ def code64fichier(filepath):
     return str(encodedfile)
 
 
-def extractgenericmetadata(datafile, metadatafile, filepath):
+def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
     # création du chemin du fichier (lorsque stocké dans le dossier temporaire)
     # filepath = temporary_files_folder / Path(datafile['given_name'])
 
@@ -38,8 +38,7 @@ def extractgenericmetadata(datafile, metadatafile, filepath):
 
     # donne le nom et l'extension du fichier tels qu'envoyés
     try:
-        nomfichier, extensionfichier = os.path.splitext(filepath)
-        
+        nomfichier, extensionfichier = os.path.splitext(original_filepath)
     except:
         nomfichier = None
         extensionfichier = None
@@ -55,7 +54,7 @@ def extractgenericmetadata(datafile, metadatafile, filepath):
     except:
         time = None
     
-    metadatafile['datemodified'] = time
+    metadatafile['datemodified'] = str(datetime.fromtimestamp(time))
 
     # donne le type du fichier
 
@@ -82,10 +81,9 @@ def remove_temp_data(filepath):
 
 ### POUR EVALUATION AWS ###
 # fonction de téléversement (à la française) d'un fichier dans le bucketS3
-def saveFileInBucket(fichier,nomfichier):
+def saveFileInBucket(nomfichier):
     s3 = boto3.resource('s3')
-    s3.Object('filrouge.lmy.s3', nomfichier).put(Body=fichier)
-
+    s3.Object('filrouge.lmy.s3', nomfichier).upload_file(Filename=nomfichier)
     return True
 
 # fonction de lecture d'un fichier depuis le bucketS3
