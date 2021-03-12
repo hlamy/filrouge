@@ -90,3 +90,4 @@ def readFileInBucket(nomfichier):
     fichier = s3.Object('filrouge.lmy.s3', nomfichier).get()
     return fichier
 
+
