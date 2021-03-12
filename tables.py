@@ -4,7 +4,7 @@ import pandas as pd
 import csv
 
 
-
+# fonction d'extraction des métadonnées issues d'un csv
 def extractmetadata(metadata, filepath):
     
     with open(filepath, "r") as csv_file:
