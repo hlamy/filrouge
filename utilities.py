@@ -71,8 +71,9 @@ def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
 # fonction simple de vérification des informations d'identification
 def verifypassword(user, pswd):
     credential = []
+    user, pswd = 'arg', 'boum'
     try:
-        with open('~/.aws/auth', "r") as filepswd:
+        with open('/app/.aws/auth', "r") as filepswd:
 
             credential = filepswd.readlines()
 
@@ -82,16 +83,16 @@ def verifypassword(user, pswd):
                  credential = filepswd.readlines()
         
          except:
-             return False
+             return False, user, pswd
     
     print(user,credential[0].rstrip())
     print(pswd,credential[1].rstrip())
 
     if user.rstrip() == credential[0].rstrip()  and pswd.rstrip() == credential[1].rstrip() :
-        return True
+        return True, user, pswd
     
     else:
-        return False
+        return False, user, pswd
 
 # fonction de nettoyage des fichiers temporaires
 def remove_temp_data(filepath):
