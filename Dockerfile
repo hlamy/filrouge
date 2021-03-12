@@ -5,6 +5,7 @@ COPY flaskroutes.py /
 COPY utilities.py /
 COPY pictures.py /
 COPY tables.py /
+COPY texte.py /
 
 RUN pip3 install flask
 RUN pip3 install setuptools
@@ -16,6 +17,6 @@ RUN pip3 install libmagic
 RUN pip3 install filetype
 RUN pip3 install boto3
 RUN pip3 install pandas
-
+RUN pip3 install PyPDF2
 
 CMD [ "python3", "./main.py", "25252"  ]
