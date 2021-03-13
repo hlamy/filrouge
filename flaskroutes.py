@@ -34,20 +34,24 @@ def mainpage():
 
 @app.route('/upload', methods=['POST'])
 def uploadfile():
-    authentif = utilities.verifypassword(request.authorization["username"], request.authorization["password"])
-    if not authentif:
-        return {'Error' : 'Failed Authorisation'}, 401
-
     
+    # verification de l'authentification par user/password
+    try:
+        authentif = utilities.verifypassword(request.authorization["username"], request.authorization["password"])
+        if not authentif:
+            return {'Error' : 'Incorrect Credentials'}, 401
+    except:
+        return {'Error' : 'Incorrect Credentials'}, 401
+
     datafile = {}
     metadatafile = {}
-    idfile = 'testouille'
+    idfile = 'nomgenerique'
     metadatafile['generic_broad_type'] = 'unknown'
     # essai de chargement du fichier fourni par le client. Si NOK, retour d'une erreur
     try:
        fichierclient = request.files['file']
     except:
-        return {'Error' : 'picture upload problem'}, 500
+        return {'Error' : 'file upload problem'}, 500
     
     randomUID = str(uuid.uuid4())
     # récupération du nom de fichier

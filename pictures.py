@@ -36,9 +36,10 @@ def extractMetadata(picturepath, metadata):
                 # Une métadonnée pour signifier que les métadonnées de type photographique EXIF n'ont pu être récupérées
                 metadata['picture_EXIF'] = False
 
-    metadata['picture_textFoundByAwsRekognition'] = str(trouve_text(picturepath))
-
-
+    try:
+        metadata['picture_textFoundByAwsRekognition'] = str(trouve_text(picturepath))
+    except:
+        metadata['picture_textFoundByAwsRekognition'] = 'No texte could be retrieved from picture'
     return metadata
 
 # fonction de convertion, dans le format qui semble le plus approprié (pour réinjection dans le JSON contenant les métadonnées) :
@@ -106,11 +107,12 @@ class RekognitionImage:
 # fonction de recherche de texte
 def trouve_text(filepath):
     rekognition_client = boto3.client('rekognition')
-
+    text_string = ''
     imageCherchable = RekognitionImage.from_file(filepath, rekognition_client)
     textes = imageCherchable.detect_text()
 
-    text_string = str(textes[0].to_dict()['text'])
-    
-    return  text_string
+    for i in range(len(textes)):
+        text_string += ' ' + str(textes[i].to_dict()['text'])
 
+
+    return  text_string

@@ -74,8 +74,14 @@ kubectl get deployments --all-namespaces
 
 kubectl get pods
 
+# nettoyage du disque avant installation
+docker-compose down
+docker system prune -a
+
+
+
 lancement du container via 
-docker-compose up --scale filrouge=5 --build filrouge nginx
+cd fil	
 
 sudo snap install microk8s --classic
 sudo snap install microk8s --classic --channel=1.18/stable
