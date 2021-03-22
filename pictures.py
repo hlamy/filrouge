@@ -100,7 +100,7 @@ class RekognitionImage:
             response = self.rekognition_client.detect_text(Image=self.image)
             texts = [RekognitionText(text) for text in response['TextDetections']]
         except:
-            pass
+            print('pb')
         else:
             return texts
 
