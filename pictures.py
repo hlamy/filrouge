@@ -108,7 +108,7 @@ class RekognitionImage:
 def trouve_text(filepath):
     rekognition_client = boto3.client('rekognition')
     text_string = ''
-    imageCherchable = RekognitionImage.from_file(filepath, rekognition_client)
+    imageCherchable = RekognitionImage.from_file(Path(filepath), rekognition_client)
     textes = imageCherchable.detect_text()
 
     for i in range(len(textes)):
