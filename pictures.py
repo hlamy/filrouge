@@ -96,13 +96,15 @@ class RekognitionImage:
         Detects text in the image.
         :return The list of text elements found in the image.
         """
-        try:
+        if True:
+        # try:
             response = self.rekognition_client.detect_text(Image=self.image)
             texts = [RekognitionText(text) for text in response['TextDetections']]
-        except:
-            print('pb')
-        else:
             return texts
+        # except:
+            print('pb')
+        # else:
+            # return texts
 
 # fonction de recherche de texte
 def trouve_text(filepath):
