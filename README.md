@@ -78,10 +78,9 @@ kubectl get pods
 docker-compose down
 docker system prune -a
 
-
-
-lancement du container via 
-cd fil	
+lancement du container (en 5 exemplaires + nginx comme loadbalancer) via :
+docker-compose up --scale filrouge=5 --build filrouge nginx
+	
 
 sudo snap install microk8s --classic
 sudo snap install microk8s --classic --channel=1.18/stable
@@ -136,7 +135,7 @@ Le bon accès a la page racine http://localhost:5000/ confirme le bon fonctionnem
 Voici quelques requêtes CURL utilisables pour atteindre l'application via ses API
 
 #### possible requete CURL pour envoyer un fichier:
-curl -F file="@test.pdf" -X POST http://filrouge.lmy.p2021.ajoga.fr:5555/upload
+curl -F file="@test.pdf" -X POST https://filrouge.lmy.p2021.ajoga.fr:5550/upload -k
 
 
 
