@@ -58,7 +58,7 @@ def uploadfile():
     idfilename = str(fichierclient.filename)
     metadatafile['generic_given_name'] = idfilename
 
-    filepath = str(temporary_files_folder / Path(randomUID))
+    filepath = str(temporary_files_folder / Path(randomUID)) 
 
     # genere un ID aléatoire unique
     datafile['uuid'] = randomUID
@@ -88,7 +88,7 @@ def uploadfile():
     except:
         pass
     
-    # extraction des metadata concernant sles fichiers texte // si erreur, pas grave
+    # extraction des metadata concernant les fichiers texte // si erreur, pas grave
     try: 
         metadatafile = texte.extractmetadata(metadatafile, filepath)
         metadatafile['generic_broad_type'] = 'texte'
@@ -125,7 +125,6 @@ def uploadfile():
     # l'exception est indispensable (au 27 fev 2021) pour gérer le manque de credentials aws dans docker (problème résolu sous EC2 AWS / UBUNTU)
     # s3 = True si sauvegarde dans S3 ok, sinon False
     try :
-        # fichier = open(filepath, 'r')
         datafile['s3'] = utilities.saveFileInBucket(filepath)
     except:
         datafile['s3'] = False

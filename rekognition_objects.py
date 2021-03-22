@@ -13,10 +13,6 @@ viewer.
 
 import io
 import logging
-# from PIL import Image, ImageDraw
-
-# logger = logging.getLogger(__name__)
-
 
 class RekognitionText:
     """Encapsulates an Amazon Rekognition text element."""
