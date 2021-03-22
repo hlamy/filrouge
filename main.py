@@ -30,4 +30,5 @@ except:
 
 # lancement du serveur flask et de l'application :
 # flaskroutes.app.run(host= '0.0.0.0', port=int(applicationportnumber), ssl_context='adhoc')
-flaskroutes.app.run(host= '0.0.0.0', port=int(applicationportnumber))
+if __name__ == '__main__':
+    flaskroutes.app.run(host= '0.0.0.0', port=int(applicationportnumber))

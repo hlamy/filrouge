@@ -110,9 +110,12 @@ def trouve_text(filepath):
     text_string = ''
     imageCherchable = RekognitionImage.from_file(Path(filepath), rekognition_client)
     textes = imageCherchable.detect_text()
-
+    print(textes)
     for i in range(len(textes)):
         text_string += ' ' + str(textes[i].to_dict()['text'])
 
 
     return  text_string
+
+if __name__ == '__main__':
+    print(trouve_text("./trashcan/texte.jpg"))
