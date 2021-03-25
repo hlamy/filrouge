@@ -81,11 +81,9 @@ docker system prune -a
 lancement du container (en 5 exemplaires + nginx comme loadbalancer) via :
 docker-compose up --scale filrouge=5 --build filrouge nginx
 	
-
+installation de microk8s si kubernetes voulu
 sudo snap install microk8s --classic
 sudo snap install microk8s --classic --channel=1.18/stable
-
-## processus de déploiement sur UBUNTU, sur Kubernetes MicroK8s :
 
 ### récupération de la dernière version de l'application :
 git pull https://github.com/hlamy/filrouge main
@@ -93,9 +91,6 @@ git pull https://github.com/hlamy/filrouge main
 ### construction des images filrouge et nginx :
 sudo docker build . -t filrouge
 sudo docker build . -t nginx
-
-### authorisation du registry de microk8s :
-sudo microk8s.enable registry
 
 ##
 
@@ -106,12 +101,6 @@ docker build -t filrouge .
 docker run -it --rm \
    -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
    -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-
-
-### Tests ####
-
-Les fichiers restants sont eux indispensables
- pour réaliser les tests de fonctionnement : test_pichandler.py réalise les tests sur les fonctions de pichandler.py alors que test_hlamy_main teste lui l'application web. Le dossier tests et ses sous-dossiers contiennent des données controlées destinées à vérifier le bon retour de l'application lors de l'envoi de ces documents.
 
 
 ### Mise en route de l'application ###
@@ -135,9 +124,7 @@ Le bon accès a la page racine http://localhost:5000/ confirme le bon fonctionnem
 Voici quelques requêtes CURL utilisables pour atteindre l'application via ses API
 
 #### possible requete CURL pour envoyer un fichier:
-curl -F file="@test.pdf" -X POST https://filrouge.lmy.p2021.ajoga.fr:5550/upload -k
+curl -u user:password -F file="@test.pdf" -X POST https://filrouge.lmy.p2021.ajoga.fr:5550/upload -k
 
 
 
-#### limitations (obsolete, à mettre à jour: ####
-- un maximum de 9 millions de fichiers sont envoyables sur l'application (ceci pour rester raisonnable : il est possible d'augmenter cette taille dans le programme si cela est désiré, mais hors des enjeux d'une application scolaire).
