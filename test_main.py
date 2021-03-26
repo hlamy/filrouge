@@ -12,6 +12,9 @@ import json
 from PIL import Image
 from requests.auth import _basic_auth_str
 from random import randint
+from flask import Flask, send_from_directory, request, abort, send_file
+import requests
+
 # Ceci est le fichier de test de l'ensemble des fonctions de hlamy_main.py. Il contient des scénarios de tests qui permettent de tester l'ensemble des fonctionnalités et des API de l'application
 
 # définition des dossiers de tests
@@ -29,53 +32,16 @@ with open('./auth', "r") as filepswd:
     username = credential[0].rstrip()  
     password = credential[1].rstrip()
 
+server_api_AWS = 'https://lmy.p2021.ajoga.fr:5555/upload'
 
-# definition du décorateur pour tester la partie application
-def avec_client(f):
-    def func(*args, **kwargs):
-        with appli.app.test_client() as client:
-            return f(*args, client, **kwargs)
-
-    return func
+server_api_DOCKER = 'https://filrouge.lmy.p2021.ajoga.fr:5550/upload'
 
 class TestApplication_filrouge(unittest.TestCase):
 
-    # test unitaire de la page principale de l'application
-    def test_mainPage(self):
-        resultatAttendu = {'Status': 'Server is up and running'}
-        self.assertIn(resultatAttendu, appli.mainpage())
-
-
-    # test de remontée d'erreur, en cas d'envoi de mauvais fichiers par exemple.
-    @avec_client
-    def testOfErrors(self, client):
-        # test de réponse négative si uploads sans authentification (401 = erreur d'authentification)
-        with client.post("/upload") as result:
-            self.assertEqual(result.status_code, 401)
-
-        headers = {'Authorization': _basic_auth_str(username, password)}   
-
-
-        # test de réponse négative si uploads avec authentification mais sans fichier
-        with client.post("/upload", headers = headers) as result:
-            self.assertEqual(result.status_code, 500)
-
-
-
-        # test d'envoi d'un fichier simple - doit répondre 200 malgré tout car gérable par l'application
-        fakefilename = 'testfile.txt'
-        fakefile = b'bourrageJustePourTester'
-        testfile = (io.BytesIO(fakefile), fakefilename)
-        testdata = {'file': testfile}
-        with client.post("/upload", data=testdata, follow_redirects=True,
-                         content_type='multipart/form-data', headers = headers) as serverresponse:
-            self.assertEqual(serverresponse.status_code, 200)
-
-
-    # test de scénario complet, d'envoi d'un fichier puis de lecture de ses métadonnées issues de l'application
-    
-    @avec_client
-    def testScenarioUpload(self, client):
+    # test vers le serveur AWS
+    def testScenarioUploadAWS(self):
+        
+        
         # Enchainement des tests avec différents formats
         formatlist = ['csv', 'jpg', 'ods', 'xlsx', 'pdf','png', 'docx', 'txt']
         for formattype in formatlist:
@@ -85,22 +51,57 @@ class TestApplication_filrouge(unittest.TestCase):
             
             nomfichierdetest = 'test' + '.' + formattype
             testpath = str(testsfile_folder / Path(nomfichierdetest))
+
             with open(testpath, 'rb') as fichier:
-                testdata = {'file': (testpath, fichier, 'multipart/form-data')}
+                testfile = {'file': (testpath, fichier, 'multipart/form-data')}
+                serverresponse = requests.post(server_api_AWS, files=testfile, verify=False, headers = headers)
 
-            serverresponse = client.post('/upload', data=testdata, follow_redirects=True, headers = headers)
-
+            
             # on vérifie qu'on obtient bien un code de réponse "200"
             self.assertEqual(serverresponse.status_code, 200)
 
             # récupération des métadonnées renvoyées par le serveur
-            receivedMetadata = str(serverresponse.data.decode("utf-8"))          
+            receivedMetadata = str(serverresponse.text)          
 
             # verification que l'extension est bien retrouvée dans le fichier de sortie :
             self.assertIn('"generic_given_extension":".'+ formattype, receivedMetadata)
 
             # verification que le fichier est bien envoyé sur le s3 :
             self.assertIn('"s3":true', receivedMetadata)
+            
+            serverresponse.close()
+    
+    # test vers le serveur DOCKER         
+    def testScenarioUploadDOCKER(self):
+        
+        
+        # Enchainement des tests avec différents formats
+        formatlist = ['csv', 'jpg', 'ods', 'xlsx', 'pdf','png', 'docx', 'txt']
+        for formattype in formatlist:
+            
+            headers = {'Authorization': _basic_auth_str(username, password)}  
+            # envoi d'un fichier vers le serveur - attente d'une réponse OK - 200
+            
+            nomfichierdetest = 'test' + '.' + formattype
+            testpath = str(testsfile_folder / Path(nomfichierdetest))
+
+            with open(testpath, 'rb') as fichier:
+                testfile = {'file': (testpath, fichier, 'multipart/form-data')}
+                serverresponse = requests.post(server_api_DOCKER, files=testfile, verify=False, headers = headers)
+
+            
+            # on vérifie qu'on obtient bien un code de réponse "200"
+            self.assertEqual(serverresponse.status_code, 200)
+
+            # récupération des métadonnées renvoyées par le serveur
+            receivedMetadata = str(serverresponse.text)          
+
+            # verification que l'extension est bien retrouvée dans le fichier de sortie :
+            self.assertIn('"generic_given_extension":".'+ formattype, receivedMetadata)
+
+            # verification que le fichier est bien envoyé sur le s3 :
+            self.assertIn('"s3":true', receivedMetadata)
+            
             serverresponse.close()
 
 # lancement de la procédure de test
