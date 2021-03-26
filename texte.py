@@ -7,10 +7,18 @@ import PyPDF2 as pdf
 def extractmetadata(metadata, filepath):
     
     nbr_lignes = 0
+    alltext = ''
     for ligne in open(filepath, "r"):
         nbr_lignes +=1
+        alltext += ligne
 
     metadata['texte_nbr_lignes'] = nbr_lignes
+    
+    try:
+        for letter in 'abcdefghijklnopqrstuvwxyz':
+            metadata['texte_occurence_de_' + letter] = alltext.count(letter)
+    except:
+        pass
 
     return metadata
 
@@ -31,14 +39,24 @@ def extractmetadata_pdf(metadata, filepath):
         
     except:
         author = 'Unknown'
-    metadata['texte_author'] = author
+    metadata['texte_auteur'] = author
     
     nbr_lignes = 0
+
+
+    for letter in 'abcdefghijklnopqrstuvwxyz':
+        metadata['texte_occurence_de_' + letter] = 0
+
     try:
         for i in range(pdfReader.numPages):
             page = pdfReader.getPage(i) 
             for ligne in page.extractText():
                 nbr_lignes +=1
+                try:
+                    for letter in 'abcdefghijklnopqrstuvwxyz':
+                        metadata['texte_occurence_de_' + letter] = metadata['texte_occurence_de_' + letter] + ligne.count(letter)
+                except:
+                    pass
     except:
         pass
 
