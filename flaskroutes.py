@@ -47,6 +47,7 @@ def uploadfile():
     metadatafile = {}
     idfile = 'nomgenerique'
     metadatafile['generic_broad_type'] = 'unknown'
+    
     # essai de chargement du fichier fourni par le client. Si NOK, retour d'une erreur
     try:
        fichierclient = request.files['file']

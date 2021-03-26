@@ -16,17 +16,10 @@ spec:
       labels:
         app: filrouge
     spec:
-      volumes:
-        - name: aws
-          hostPath:
-            path: $HOME/.aws
-            type: Directory
       containers:
       - name: filrouge
-        image: filrouge:latest
-        volumeMounts:
-          - name: aws
-            mountPath: /app/.aws
+        image: hlamy/sio2021:latest
         ports:
         - containerPort: 5555
-        
+      imagePullSecrets:
+      - name: regcred

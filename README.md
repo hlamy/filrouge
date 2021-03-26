@@ -16,7 +16,7 @@ Cet outil d'extraction de métadonnées a été developpée sous windows et testé ave
 
 Python 3.7, puis les librairies nécessaires doivent être installées. 
 
-Le contenu du fichier zippé doit être dézippé dans le répertoire choisi par l'utilisateur pour faire fonctionner l'application, pour y déposer l'ensemble des scripts python nécessaire.
+Le contenu du fichier zippé doit être dézippé dans le répertoire choisi par l'utilisateur pour faire fonctionner l'application, pour y déposer l'ensemble des scripts python nécessaires.
 
 
 ### python3.7 : 
@@ -28,36 +28,9 @@ installation via $ pkg install
 ### installation des librairies nécessaires :
 pip install -r requirements.txt
 
-## Ou librairie par librairie via :
-
-### flask library, 1.1.2 :
-installation via $ pip install flask
-
-### pillow library, 8.0.1:
-installation via $ pip install pillow
-
-### celery library, 5.0.5:
-installation via $ pip install celery
-
-### pathlib library, 1.0.1
-installation via $ pip install pathlib
-
-### paramiko library
-installation via $ pip install paramiko
-
-### installation de docker
-pkg install docker
-
-### installation de docker-machine
-pkg install docker-machine
-
-### installation de virtualbox-ose
-pkg install virtualbox-ose
-
-
 ____________________________________
 
-## Commandes utiles:
+## Commandes utiles (aide mémoire):
 docker container ls
 
 docker stop strange_shockley
