@@ -24,8 +24,7 @@ paths:
       description: ""
       operationId: "upload"
       consumes:
-      - "application/json"
-      - "application/xml"
+      - multipart/form-data
       produces:
       - "application/json"
       parameters:
@@ -35,14 +34,9 @@ paths:
         description: "file to upload"
         required: True
         type: "file"
-      - name: "username"
+      - name: "authorisation"
         in: "query"
-        description: "The user name for login"
-        required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "The password for login in clear text"
+        description: "The credentials for authorisation"
         required: true
         type: "string"
       responses:
