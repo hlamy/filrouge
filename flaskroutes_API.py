@@ -38,6 +38,7 @@ def uploadfile():
     # verification de l'authentification par user/password
     try:
         authentif = utilities.verifypassword(request.authorization["username"], request.authorization["password"])
+        print(request.authorization["username"],':', request.authorization["password"])
         if not authentif:
             return {'Error' : 'Incorrect Credentials'}, 401
     except:

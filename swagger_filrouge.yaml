@@ -1,0 +1,72 @@
+swagger: "2.0"
+info:
+  description: "Ceci est une application d'extraction de metadonnees. Elle a ete codée dans le cadre du Mastere Specialise SIO - Ingenierie de la Donnée, de l'ecole CentraleSupelec par l'eleve Hugues LAMY"
+  version: "1.0.0"
+  title: "Swagger Filrouge"
+  contact:
+    email: "hugues.lamy@gmail.com"
+host: "http://lmy.p2021.ajoga.fr:5055"
+basePath: "/v1"
+tags:
+- name: "filrouge"
+  description: "Filrouge App from Hugues LAMY"
+  externalDocs:
+    description: "Information & code on GitHub Repository"
+    url: "https://github.com/hlamy/filrouge"
+schemes:
+- "https"
+paths:
+  /upload:
+    post:
+      tags:
+      - "upload"
+      summary: "send a file to filrouge for metadata extraction"
+      description: ""
+      operationId: "upload"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "file"
+        in: "formData"
+        description: "file to upload"
+        required: True
+        type: "file"
+      - name: "username"
+        in: "query"
+        description: "The user name for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        "401":
+          description: "Unauthorized Access - need proper login & password"
+        "412":
+          description: "No file received"
+        "415":
+          description: "File format unsupported, could not extract metadata"
+        "507":
+          description: "File saving problem"
+        "200":
+          description: "return a JSON object containing some control tags & all extracted metadata from provided file"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    description: "unique identifier to the sent file, given by filrouge"
+                  s3:
+                    type: boolean
+                    description: "true if file could be saved on AWS S3 bucket - false otherwise"
+                  metadata:
+                    type: object
+                    description: "Contain extracted metadata"

@@ -58,7 +58,7 @@ class TestApplication_filrouge(unittest.TestCase):
 
         # test de réponse négative si uploads avec authentification mais sans fichier
         with client.post("/upload", headers = headers) as result:
-            self.assertEqual(result.status_code, 500)
+            self.assertEqual(result.status_code, 412)
 
 
 
