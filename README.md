@@ -12,40 +12,26 @@ Le développement a été effectué avec VS Code - l'environnement virtuel crée par 
 
 ## Installation
 
-Cet outil d'extraction de métadonnées a été developpée sous windows et testé avec la distribution FreeBSD (système recommandé).
+Cet outil d'extraction de métadonnées a été developpée sous windows et testé avec la distribution FreeBSD (système recommandé) et GNU/Linux - distribution UBUNTU (si docker).
 
 Python 3.7, puis les librairies nécessaires doivent être installées. 
 
 Le contenu du fichier zippé doit être dézippé dans le répertoire choisi par l'utilisateur pour faire fonctionner l'application, pour y déposer l'ensemble des scripts python nécessaires.
 
 
-### python3.7 : 
+# python3.7 : 
 installation via $ pkg install python37
 
-### pip : 
+# pip : 
 installation via $ pkg install
 
-### installation des librairies nécessaires :
+# installation des librairies nécessaires :
 pip install -r requirements.txt
 
 ____________________________________
 
-## Commandes utiles (aide mémoire):
-docker container ls
+## Commandes docker utiles (aide mémoire):
 
-docker stop strange_shockley
-
-docker build -t filrouge .
-
-docker run -p 5555:25252 -v "f:/applicationdata/":/temp filrouge
-
-curl -F file="@test.docx" -X POST http://127.0.0.1:5555/upload
-
-kubectl delete -n default deployment filrouge
-
-kubectl get deployments --all-namespaces
-
-kubectl get pods
 
 # nettoyage du disque avant installation
 docker-compose down
@@ -54,35 +40,18 @@ docker system prune -a
 lancement du container (en 5 exemplaires + nginx comme loadbalancer) via :
 docker-compose up --scale filrouge=5 --build filrouge nginx
 	
-installation de microk8s si kubernetes voulu
-sudo snap install microk8s --classic
-sudo snap install microk8s --classic --channel=1.18/stable
-
-### récupération de la dernière version de l'application :
+# récupération de la dernière version de l'application :
 git pull https://github.com/hlamy/filrouge main
 
-### construction des images filrouge et nginx :
+# construction des images filrouge et nginx :
 sudo docker build . -t filrouge
 sudo docker build . -t nginx
 
-##
+## Mise en route de l'application ###
 
-AWS_ACCESS_KEY_ID=$(aws --profile default configure get aws_access_key_id)
-AWS_SECRET_ACCESS_KEY=$(aws --profile default configure get aws_secret_access_key)
+L'application peut être lancée via l'execution du script "main.py". Aucune autre action n'est nécessaire, mais l'utilisateur doit avoir les droits suffisants pour que le script puisse executer/lire et écrire dans son dossier courant.
 
-docker build -t filrouge .
-docker run -it --rm \
-   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-   -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-
-
-### Mise en route de l'application ###
-
-L'application peut être lancée via l'execution du script "laucher.py". Aucune autre action n'est nécessaire, mais l'utilisateur doit avoir les droits suffisants pour que le script puisse executer/lire et écrire dans son dossier courant.
-
-Ce script lancera un serveur flask accessible sur le port 5000, c'est à dire par exemple sur http://localhost:5000/ (ou l'adresse IP de la machine serveur suivi de :5000). 
-
-Le bon accès a la page racine http://localhost:5000/ confirme le bon fonctionnement de l'application et donne les informations sur l'API.
+Ce script lancera un serveur flask accessible sur le port 5555 par défaut ou sur le port fourni en argument.
 
 
 ## Les contrats API :
