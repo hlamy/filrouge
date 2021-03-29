@@ -11,7 +11,7 @@ def extractmetadata(metadata, filepath):
     for ligne in open(filepath, "r"):
         nbr_lignes +=1
         alltext += ligne
-
+    alltext = alltext.lower()
     metadata['texte_nbr_lignes'] = nbr_lignes
     
     try:
@@ -52,6 +52,7 @@ def extractmetadata_pdf(metadata, filepath):
             page = pdfReader.getPage(i) 
             for ligne in page.extractText():
                 nbr_lignes +=1
+                ligne = ligne.lower()
                 try:
                     for letter in 'abcdefghijklnopqrstuvwxyz':
                         metadata['texte_occurence_de_' + letter] = metadata['texte_occurence_de_' + letter] + ligne.count(letter)
