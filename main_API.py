@@ -1,6 +1,6 @@
 # coding=UTF-8
 # importation de l'API
-import flaskroutes
+import flaskroutes_API as flaskroutes
 # pour gestion des chemins de fichier, import de 'pathlib'
 from pathlib import Path
 # pour gestion de la création de dossier, import de 'os'
