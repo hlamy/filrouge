@@ -21,16 +21,19 @@ import requests
 testsfile_folder = Path('./testfiles')
 
 # definition de l'usager par défaut (une meilleure solution sera à trouver pour la suite)
-credential = []
+# credential = []
 
-with open('./auth', "r") as filepswd:
-    credential = filepswd.readlines()
+# with open('./auth', "r") as filepswd:
+#     credential = filepswd.readlines()
 
 
-with open('./auth', "r") as filepswd:
-    credential = filepswd.readlines()  
-    username = credential[0].rstrip()  
-    password = credential[1].rstrip()
+# with open('./auth', "r") as filepswd:
+#     credential = filepswd.readlines()  
+#     username = credential[0].rstrip()  
+#     password = credential[1].rstrip()
+
+username = input('Enter Username: ')
+password = input('Enter Password: ')
 
 server_api_AWS = 'https://lmy.p2021.ajoga.fr:5555/upload'
 
