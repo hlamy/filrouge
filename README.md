@@ -30,7 +30,9 @@ pip install -r requirements.txt
 
 ____________________________________
 
-## Commandes docker utiles (aide mémoire):
+## Lancement des tests :
+
+test_main.py et test_flaskroutes.py permettent de lancer les tests automatiques de l'application filrouge. Il demanderont les crédentiels d'accès au chemin /upload pour pouvoir opérer.
 
 
 #### nettoyage du disque avant installation
