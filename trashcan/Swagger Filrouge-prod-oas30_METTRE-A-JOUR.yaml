@@ -1,0 +1,63 @@
+openapi: "3.0.1"
+info:
+  title: "Swagger Filrouge"
+  description: "Ceci est une application d'extraction de metadonnees. Elle a ete codée dans le cadre du Mastere Specialise SIO - Ingenierie de la Donnée, de l'ecole CentraleSupelec par l'eleve Hugues LAMY"
+  contact:
+    email: "hugues.lamy@gmail.com"
+  version: "1.0.0"
+servers:
+- url: "https://g8lqy13l2c.execute-api.us-east-1.amazonaws.com/{basePath}"
+  variables:
+    basePath:
+      default: "/prod"
+tags:
+- name: "filrouge"
+  description: "Filrouge App from Hugues LAMY"
+  externalDocs:
+    description: "Information & code on GitHub Repository"
+    url: "https://github.com/hlamy/filrouge"
+paths:
+  /upload:
+    post:
+      tags:
+      - "upload"
+      summary: "send a file to filrouge for metadata extraction"
+      operationId: "upload"
+      consumes:
+      - multipart/form-data
+      produces:
+      - "application/json"
+      parameters:
+      - name: "authorization"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+      - name: "Content-Type"
+        in: "header"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "415":
+          description: "File format unsupported, could not extract metadata"
+          content: {}
+        "200":
+          description: "return a JSON object containing some control tags & all extracted metadata from provided file"
+          content: {}
+        "507":
+          description: "File saving problem"
+          content: {}
+        "401":
+          description: "Unauthorized Access - need proper login & password"
+          content: {}
+        "412":
+          description: "No file received"
+          content: {}
+  /:
+    get:
+      responses:
+        "200":
+          description: "200 response"
+          content: {}
+components: {}

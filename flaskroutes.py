@@ -66,10 +66,10 @@ def uploadfile():
     # genere un ID aléatoire unique
     datafile['uuid'] = randomUID
 
-    try:
-        fichier = utilities.readFileInBucket(randomUID)
-    except:
-        pass
+    # try:
+    #     fichier = utilities.readFileInBucket(randomUID)
+    # except:
+    #     pass
     # sauvegarde du fichier temporairement sur disque
 
     try:
@@ -137,3 +137,27 @@ def uploadfile():
 
     # renvoi du dictionnaire sous forme d'un fichier texte JSON
     return datafile
+
+# # méthode d'accès à un fichier sur S3 depuis l'API (via GET) - façon téléchargement - Non fonctionnel à ce jour
+# @app.route('/download/<fileID>', methods=['GET'])
+# def fileaccess(fileID):
+    
+#     # verification de l'authentification par user/password
+#     try:
+#         authentif = utilities.verifypassword(request.authorization["username"], request.authorization["password"])
+#         if not authentif:
+#             return {'Error' : 'Incorrect Credentials'}, 401
+#     except:
+#         return {'Error' : 'Credentials Required'}, 401
+
+#     try:
+#         fichier = utilities.readFileInBucket(fileID)
+
+#         fichier.save(fileID)
+
+    
+#         return send_file(str(utilities.temporary_files_folder / Path(fileID)), as_attachment=True)
+
+#     # si fichier non trouvé : erreur 404, car cas similaire à une page non trouvée
+#     except FileNotFoundError:
+#         abort(404)
