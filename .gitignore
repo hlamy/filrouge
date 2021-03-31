@@ -3,3 +3,5 @@
 .sec/server.crt
 .sec/server.key
 auth
+.crt/server.key
+.crt/server.crt

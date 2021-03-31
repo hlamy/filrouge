@@ -5,14 +5,14 @@ services:
         build: .
         volumes :
           - $HOME/.aws:/app/.aws:ro
-          - ./.sec:/.sec
+          - ./.sec:/.sec:ro
         ports:
           - "5555-5559:5555"
  
     nginx:
         build: ./nginx
         volumes :
-          - ./.sec:/etc/nginx/ssl/filrouge.lmy.p2021.ajoga.fr/
+          - ./.crt:/etc/nginx/ssl/filrouge.lmy.p2021.ajoga.fr/
         ports:
           - "5550:443"
         depends_on:
