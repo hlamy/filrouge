@@ -2,3 +2,4 @@
 
 .sec/server.crt
 .sec/server.key
+auth
