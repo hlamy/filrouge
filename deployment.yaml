@@ -19,7 +19,7 @@ spec:
       volumes:
         - name: app-auth
           hostPath:
-            path: ./.sec
+            path: /filrouge/.sec
             type: Directory
       containers:
       - name: filrouge
