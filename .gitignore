@@ -5,3 +5,5 @@
 auth
 .crt/server.key
 .crt/server.crt
+kubernetes/.crt/server.key
+kubernetes/.crt/server.crt
