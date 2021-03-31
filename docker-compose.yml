@@ -10,6 +10,8 @@ services:
  
     nginx:
         build: ./nginx
+        volumes :
+          - ./.sec:/etc/nginx/ssl/filrouge.lmy.p2021.ajoga.fr/
         ports:
           - "5550:443"
         depends_on:
