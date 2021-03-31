@@ -5,6 +5,7 @@ services:
         build: .
         volumes :
           - $HOME/.aws:/app/.aws:ro
+          - ./.sec:/.sec
         ports:
           - "5555-5559:5555"
  

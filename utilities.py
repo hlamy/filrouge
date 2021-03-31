@@ -72,7 +72,7 @@ def extractgenericmetadata(datafile, metadatafile, filepath, original_filepath):
 def verifypassword(user, pswd):
     credential = []
     try:
-        with open('./auth', "r") as filepswd:
+        with open('./.sec/auth', "r") as filepswd:
 
             credential = filepswd.readlines()
 
@@ -82,7 +82,12 @@ def verifypassword(user, pswd):
                  credential = filepswd.readlines()
         
          except:
-             return False
+            try:
+                with open('./auth', "r") as filepswd:
+
+                    credential = filepswd.readlines()
+            except:
+                return False
     
 
     if user.rstrip() == credential[0].rstrip()  and pswd.rstrip() == credential[1].rstrip() :
